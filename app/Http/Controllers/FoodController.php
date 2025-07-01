@@ -10,11 +10,18 @@ class FoodController extends Controller
     public function index(Request $request)
     {
         $query = Food::query();
+        $categories = \App\Models\Category::all();
         
+        // Filter by category
+        if ($request->has('category_id') && $request->category_id != '') {
+            $query->where('category_id', $request->category_id);
+        }
         // Search by name
         if ($request->has('search') && $request->search != '') {
-            $query->where('nama', 'like', '%' . $request->search . '%')
+            $query->where(function($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%')
                   ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+            });
         }
         
         // Filter by price range
@@ -41,7 +48,7 @@ class FoodController extends Controller
         }
         
         $foods = $query->get();
-        return view('food.index', compact('foods'));
+        return view('food.index', compact('foods', 'categories'));
     }
 
     public function addToCart(Request $request, $id)

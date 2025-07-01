@@ -20,6 +20,12 @@
                                     <div class="mb-2"><i class="fas fa-calendar-alt me-2 text-secondary"></i><strong>Waktu Pesan:</strong> {{ $order->created_at->format('d M Y H:i') }}</div>
                                     <div class="mb-2"><i class="fas fa-user me-2 text-secondary"></i><strong>Nama Pemesan:</strong> {{ $order->nama_pemesan }}</div>
                                     <div class="mb-2"><i class="fas fa-barcode me-2 text-secondary"></i><strong>No. Resi:</strong> {{ $order->tracking_number }}</div>
+                                    @php
+                                        $kurir_nama = ["Budi", "Andi", "Siti", "Rina", "Agus", "Dewi", "Rizky", "Putra", "Lina", "Fajar"];
+                                        $nama_kurir = $kurir_nama[array_rand($kurir_nama)];
+                                        $id_kurir = 'KR' . str_pad(rand(1,9999), 4, '0', STR_PAD_LEFT);
+                                    @endphp
+                                    <div class="mb-2"><i class="fas fa-motorcycle me-2 text-secondary"></i><strong>Kurir:</strong> {{ $nama_kurir }} <span class="text-muted">(ID: {{ $id_kurir }})</span></div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-2"><i class="fas fa-map-marker-alt me-2 text-secondary"></i><strong>Alamat:</strong> {{ $order->alamat }}</div>

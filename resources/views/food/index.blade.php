@@ -89,33 +89,61 @@
         </div>
     </div>
 
+    <!-- Categories Filter Section -->
+    <div class="mb-4">
+        <form method="GET" action="{{ route('foods.index') }}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="category_id" class="form-label">Filter Kategori</label>
+                <select class="form-select" name="category_id" id="category_id" onchange="this.form.submit()">
+                    <option value="">Semua Kategori</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-8 text-end">
+                @if(request('category_id'))
+                    <a href="{{ route('foods.index') }}" class="btn btn-outline-secondary mt-3">Reset Kategori</a>
+                @endif
+            </div>
+        </form>
+    </div>
+
     <!-- Categories Section -->
     <div class="mb-4">
         <h3 class="mb-3"><i class="fas fa-tags me-2"></i>Kategori Makanan</h3>
         <div class="row">
             <div class="col-md-3 mb-3">
-                <div class="card text-center p-3 bg-transparent border-0">
-                    <i class="fas fa-hamburger mb-2" style="font-size: 2rem; color: #ffe066;"></i>
-                    <h6 style="color: #fff;">Makanan Utama</h6>
-                </div>
+                <a href="{{ route('foods.index', ['category_id' => $categories->where('nama', 'Makanan Utama')->first()->id ?? '']) }}" class="text-decoration-none">
+                    <div class="card text-center p-3 bg-transparent border-0 {{ request('category_id') == ($categories->where('nama', 'Makanan Utama')->first()->id ?? '') ? 'border border-warning' : '' }}" style="cursor:pointer;">
+                        <i class="fas fa-hamburger mb-2" style="font-size: 2rem; color: #ffe066;"></i>
+                        <h6 style="color: #fff;">Makanan Utama</h6>
+                    </div>
+                </a>
             </div>
             <div class="col-md-3 mb-3">
-                <div class="card text-center p-3 bg-transparent border-0">
-                    <i class="fas fa-coffee mb-2" style="font-size: 2rem; color: #6c63ff;"></i>
-                    <h6 style="color: #fff;">Minuman</h6>
-                </div>
+                <a href="{{ route('foods.index', ['category_id' => $categories->where('nama', 'Minuman')->first()->id ?? '']) }}" class="text-decoration-none">
+                    <div class="card text-center p-3 bg-transparent border-0 {{ request('category_id') == ($categories->where('nama', 'Minuman')->first()->id ?? '') ? 'border border-warning' : '' }}" style="cursor:pointer;">
+                        <i class="fas fa-coffee mb-2" style="font-size: 2rem; color: #6c63ff;"></i>
+                        <h6 style="color: #fff;">Minuman</h6>
+                    </div>
+                </a>
             </div>
             <div class="col-md-3 mb-3">
-                <div class="card text-center p-3 bg-transparent border-0">
-                    <i class="fas fa-ice-cream mb-2" style="font-size: 2rem; color: #fffbe7;"></i>
-                    <h6 style="color: #fff;">Dessert</h6>
-                </div>
+                <a href="{{ route('foods.index', ['category_id' => $categories->where('nama', 'Dessert')->first()->id ?? '']) }}" class="text-decoration-none">
+                    <div class="card text-center p-3 bg-transparent border-0 {{ request('category_id') == ($categories->where('nama', 'Dessert')->first()->id ?? '') ? 'border border-warning' : '' }}" style="cursor:pointer;">
+                        <i class="fas fa-ice-cream mb-2" style="font-size: 2rem; color: #fffbe7;"></i>
+                        <h6 style="color: #fff;">Dessert</h6>
+                    </div>
+                </a>
             </div>
             <div class="col-md-3 mb-3">
-                <div class="card text-center p-3 bg-transparent border-0">
-                    <i class="fas fa-pizza-slice mb-2" style="font-size: 2rem; color: #3e92cc;"></i>
-                    <h6 style="color: #fff;">Snack</h6>
-                </div>
+                <a href="{{ route('foods.index', ['category_id' => $categories->where('nama', 'Snack')->first()->id ?? '']) }}" class="text-decoration-none">
+                    <div class="card text-center p-3 bg-transparent border-0 {{ request('category_id') == ($categories->where('nama', 'Snack')->first()->id ?? '') ? 'border border-warning' : '' }}" style="cursor:pointer;">
+                        <i class="fas fa-pizza-slice mb-2" style="font-size: 2rem; color: #3e92cc;"></i>
+                        <h6 style="color: #fff;">Snack</h6>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
@@ -140,7 +168,7 @@
                     @endif
                     <div class="card-body d-flex flex-column">
                         <div class="mb-2">
-                            <span class="category-badge">Makanan Utama</span>
+                            <span class="category-badge">{{ $food->category ? $food->category->nama : '-' }}</span>
                         </div>
                         <h5 class="card-title" style="color: #ffe066;">{{ $food->nama }}</h5>
                         <p class="card-text" style="color: #ffe066;">{{ $food->deskripsi }}</p>
@@ -149,7 +177,7 @@
                                 <span class="price-tag" style="color: #232946; background: #ffe066;">Rp{{ number_format($food->harga, 0, ',', '.') }}</span>
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-star text-warning me-1"></i>
-                                    <span class="text-muted" style="color: #fffbe7;">{{ number_format($food->average_rating, 1) }} ({{ $food->reviews_count }})</span>
+                                    <span style="color: #ffe066 !important; font-weight: bold; text-shadow: 0 0 4px #232946, 0 0 2px #000; font-size: 1.1rem;">{{ number_format($food->average_rating, 1) }} ({{ $food->reviews_count }})</span>
                                 </div>
                             </div>
                             <form action="{{ route('foods.addToCart', $food->id) }}" method="POST" class="mb-2">
@@ -205,40 +233,40 @@
 @foreach($foods as $food)
 <div class="modal fade" id="reviewModal{{ $food->id }}" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Review {{ $food->nama }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content" style="background: #232946; color: #ffe066; border-radius: 18px; border: 2px solid #ffe066; box-shadow: 0 0 24px #ffe06655;">
+            <div class="modal-header" style="background: transparent; border-bottom: 1px solid #ffe066;">
+                <h5 class="modal-title" style="color: #ffe066; text-shadow: 0 0 8px #ffe06699;">Review {{ $food->nama }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('reviews.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="food_id" value="{{ $food->id }}">
                     <div class="mb-3">
-                        <label class="form-label">Nama Anda</label>
-                        <input type="text" class="form-control" name="nama_reviewer" required>
+                        <label class="form-label" style="color: #ffe066;">Nama Anda</label>
+                        <input type="text" class="form-control" name="nama_reviewer" required style="background: #232946; color: #ffe066; border: 1px solid #6c63ff;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Rating</label>
+                        <label class="form-label" style="color: #ffe066;">Rating</label>
                         <div class="d-flex">
                             @for($i = 1; $i <= 5; $i++)
                             <div class="form-check me-3">
-                                <input class="form-check-input" type="radio" name="rating" value="{{ $i }}" id="rating{{ $food->id }}{{ $i }}" required>
-                                <label class="form-check-label" for="rating{{ $food->id }}{{ $i }}">
-                                    <i class="fas fa-star text-warning"></i> {{ $i }}
+                                <input class="form-check-input" type="radio" name="rating" value="{{ $i }}" id="rating{{ $food->id }}{{ $i }}" required style="background: #232946; border: 1px solid #ffe066;">
+                                <label class="form-check-label" for="rating{{ $food->id }}{{ $i }}" style="color: #ffe066; font-weight: bold;">
+                                    <i class="fas fa-star text-warning"></i> <span style="color: #ffe066;">{{ $i }}</span>
                                 </label>
                             </div>
                             @endfor
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Komentar (Opsional)</label>
-                        <textarea class="form-control" name="komentar" rows="3" placeholder="Bagaimana pengalaman Anda dengan makanan ini?"></textarea>
+                        <label class="form-label" style="color: #ffe066;">Komentar (Opsional)</label>
+                        <textarea class="form-control" name="komentar" rows="3" placeholder="Bagaimana pengalaman Anda dengan makanan ini?" style="background: #232946; color: #ffe066; border: 1px solid #6c63ff;"></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Kirim Review</button>
+                <div class="modal-footer" style="background: transparent; border-top: 1px solid #ffe066;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: #6c63ff; color: #fff; border: none;">Batal</button>
+                    <button type="submit" class="btn btn-primary" style="background: #ffe066; color: #232946; font-weight: bold; border: none;">Kirim Review</button>
                 </div>
             </form>
         </div>

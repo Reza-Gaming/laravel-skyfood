@@ -32,7 +32,7 @@
                                 <form action="{{ route('cart.update', $id) }}" method="POST" class="d-flex align-items-center">
                                     @csrf
                                     <button type="submit" name="qty" value="{{ $item['qty'] - 1 }}" class="btn btn-outline-secondary btn-sm" {{ $item['qty'] <= 1 ? 'disabled' : '' }}>-</button>
-                                    <input type="text" name="qty" value="{{ $item['qty'] }}" class="form-control text-center mx-1" style="width: 40px;" readonly>
+                                    <input type="text" value="{{ $item['qty'] }}" class="form-control text-center mx-1" style="width: 40px;" readonly>
                                     <button type="submit" name="qty" value="{{ $item['qty'] + 1 }}" class="btn btn-outline-secondary btn-sm">+</button>
                                 </form>
                             </div>
@@ -198,7 +198,12 @@ function applyPromo() {
     background: rgba(20, 24, 48, 0.7) !important;
 }
 .price-tag, .fw-bold, .text-success, .form-control, .input-group-text {
-    color: #ffe066 !important;
+    color: #232946 !important;
+    background: #ffe066 !important;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 0 4px #ffe06699;
 }
 .input-group .form-control {
     background: #222 !important;

@@ -25,4 +25,9 @@ class Food extends Model
     {
         return $this->reviews()->count();
     }
+
+    public function category()
+    {
+        return $this->belongsTo(\App\Models\Category::class);
+    }
 }
