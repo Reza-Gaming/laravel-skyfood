@@ -21,6 +21,9 @@ RUN docker-php-ext-install pdo pdo_mysql pdo_sqlite
 # Copy project ke folder web server
 COPY --from=build /app /var/www/html
 
+# Pastikan file database.sqlite selalu ada
+RUN touch /var/www/html/database/database.sqlite
+
 # Set permission storage, bootstrap/cache, dan database
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
