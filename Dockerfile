@@ -12,6 +12,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Copy ke image PHP Apache
 FROM php:8.2-apache
 
+# Install dependency OS untuk SQLite
+RUN apt-get update && apt-get install -y libsqlite3-dev
+
 # Install ekstensi yang dibutuhkan Laravel
 RUN docker-php-ext-install pdo pdo_mysql pdo_sqlite
 
